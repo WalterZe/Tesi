@@ -1222,8 +1222,10 @@ class centerline(vessel):
         centerlineGeometry.SetLineSmoothing(1)
         centerlineGeometry.SetSmoothingFactor(0.1)
         centerlineGeometry.Update()
+        test = centerlineGeometry.GetOutput()
         self.Centerline = centerlineGeometry.GetOutput()
-        vtk_methods.WritePolyData(self.Centerline, self.fn)
+        print '\n -----'+self.fn, self.Centerline
+        vtk_methods.WritePolyData(test, self.fn)
 
     def Viewer(self):
         actor_cl = vtk_methods.CreateActor(self.Centerline)
@@ -1893,7 +1895,7 @@ class branch(vessel):
                 ac+=self.Sections_resampled[len(self.Sections_resampled)-1].createActor()
                 
                 self.viewActors(ac)
-            return id, vec1
+            return id, vec1 #id, punto
             
         elif out == 'out' or out == None:
             debug = 1
@@ -2139,11 +2141,11 @@ class branch(vessel):
             if debug == 2: 
                 
                 print '--- Branch: '+str(self.GroupId)+'---'
-                print 'idFirstSection:'+str(self.selectSection('first'))+' id', id, 'point', point
+                print 'idFirstSection:'+str(self.selectSection('first'))+' id'+str(id)+' point: '+str(point)
                 
                 #visualizzazione
                 ac1=[]
-                ac1+= vtk_methods.CreateSphere(point, 0.2, colors[6])
+                ac1+= vtk_methods.CreateSphere(point, 0.1, colors[6])
                 
                 self.viewActors(ac1)
                 
@@ -2640,43 +2642,43 @@ class section(vessel):
 #vaso=vessel(FileIn.name)
 
 #### -------------------------------___SEZIONE DI PROVA
-sezione = section()
-sezione.Reader('/home/walter/Desktop/cerchiotest.txt')
-sezione.clPoint=[0, 0, 0]
-ac = sezione.createActor()
-ac+= vtk_methods.CreateCoords([0, 0, 0, ], [1, 0, 0], [0, 1, 0], [0, 0, 1])
-
-O = [0, 0, 0]
-p_0 = sezione.Surface.GetPoints().GetPoint(0)
-
-vrs0 = vtk_methods.versore(O, p_0)
-vrs1 = vtk_methods.vettore(O, [5, -5, 0])
-print O, p_0,vrs0, vrs1
-#ac+= vtk_methods.CreateVersor(O, vrs0)
-ac+= vtk_methods.CreateVersor(O, vtk_methods.normalize(vrs1), colors[4])
-id, new_point = sezione.findFirstAngle(vrs1)
-print '---', id, new_point, O
-vrs2 = vtk_methods.versore(O, sezione.Surface.GetPoints().GetPoint(id))
-ac+= vtk_methods.CreateVersor(O, vrs2, colors[5])
-sezione.viewActors(ac)
+##sezione = section()
+##sezione.Reader('/home/walter/Desktop/cerchiotest.txt')
+##sezione.clPoint=[0, 0, 0]
+##ac = sezione.createActor()
+##ac+= vtk_methods.CreateCoords([0, 0, 0, ], [1, 0, 0], [0, 1, 0], [0, 0, 1])
+##
+##O = [0, 0, 0]
+##p_0 = sezione.Surface.GetPoints().GetPoint(0)
+##
+##vrs0 = vtk_methods.versore(O, p_0)
+##vrs1 = vtk_methods.vettore(O, [5, -5, 0])
+##print O, p_0,vrs0, vrs1
+###ac+= vtk_methods.CreateVersor(O, vrs0)
+##ac+= vtk_methods.CreateVersor(O, vtk_methods.normalize(vrs1), colors[4])
+##id, new_point = sezione.findFirstAngle(vrs1)
+##print '---', id, new_point, O
+##vrs2 = vtk_methods.versore(O, sezione.Surface.GetPoints().GetPoint(id))
+##ac+= vtk_methods.CreateVersor(O, vrs2, colors[5])
+##sezione.viewActors(ac)
 ####------------------------------------------------------------------------------
-#vaso = vessel('/home/walter/Desktop/10Aprile/File STL/PRE_INNER_WALL.stl')
-#vaso.Execute(None, 20, 2)
-#print 'Execute Done'
-#vaso.computeBoundariesPoints()
-#print 'CopmputeBoundariesPoints Done'
-##vaso.viewAllSections()
-##print vaso.BifGroupId
-##vaso.viewBranchSections(6)
-#
-##vaso.ReorderPoints(['first', None])
-##vaso.ReorderPoints(['boundaries', 4])
-##vaso.ReorderPoints(['new', 4])
-#vaso.ReorderPoints2(4)
-#print 'ReorderPoints Done'
+vaso = vessel('/home/walter/Desktop/10Aprile/File STL/PRE_INNER_WALL.stl')
+vaso.Execute(None, 20, 2)
+print 'Execute Done'
+vaso.computeBoundariesPoints()
+print 'CopmputeBoundariesPoints Done'
+vaso.viewAllSections()
+#print vaso.BifGroupId
+#vaso.viewBranchSections(6)
+
+#vaso.ReorderPoints(['first', None])
+#vaso.ReorderPoints(['boundaries', 4])
+#vaso.ReorderPoints(['new', 4])
+vaso.ReorderPoints2(4)
+print 'ReorderPoints Done'
 #
 ##vaso.CreateSectionsVTP()
-#vaso.viewAllSections()
+vaso.viewAllSections()
 #vaso.printAllPoints()
 
 
